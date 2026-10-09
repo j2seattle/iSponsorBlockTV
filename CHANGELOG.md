@@ -31,6 +31,10 @@ All notable changes to **isponsorblocktv** are documented here.
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-10-08
+
+- [INTERNAL] [agent-context] Hermes SOUL and the service check now say R1 is deliberate. Missing DNS, NPM, Kuma, Homarr, and a UniFi reservation are not open work.
+
 ## [0.1.0] — 2026-10-08
 
 - [OPS] Trial container on CT 108. Image `ghcr.io/dmunozv04/isponsorblocktv:v2.11.0`. No published port. One TV paired as "YouTube on TV".

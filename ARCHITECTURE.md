@@ -192,7 +192,7 @@ The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHS
 
 ## 16. Open Items & Planned Changes
 
-- Gate 4 and Gate 5 stay N/A unless the app grows a health URL. Do not invent a hostname for a process with no port.
+- Gate 4 and Gate 5 stay N/A unless the app grows a health URL. Do not invent a hostname for a process with no port. Hermes is told this R1 state is deliberate.
 - Gate 7: a PBS snapshot taken after 2026-10-08 has not been restored.
 - Gate 8: one container memory sample. Warning and critical thresholds are not set.
 - Dashlane copy of `config.json` is not done.

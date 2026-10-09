@@ -29,7 +29,7 @@ v2.11.0 on CT 108. No port. Categories `sponsor`, `selfpromo`, `interaction`. On
 
 Lab repo: [https://github.com/j2seattle/iSponsorBlockTV](https://github.com/j2seattle/iSponsorBlockTV). Upstream: [dmunozv04/iSponsorBlockTV](https://github.com/dmunozv04/iSponsorBlockTV).
 
-Readiness **R1**. Do not add DNS, NPM, Kuma, or a UniFi reservation for this container. The host `192.168.30.106` is already reserved.
+Readiness **R1**, on purpose. Do not add DNS, NPM, Kuma, or a UniFi reservation for this container. The host `192.168.30.106` is already reserved. Hermes is told the same limit.
 
 ## Do not
 
