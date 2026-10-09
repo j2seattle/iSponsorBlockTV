@@ -1,0 +1,11 @@
+# iSponsorBlockTV on CT 108. No published port. Bridge network, not host.
+# Config with the lounge screen id stays on the guest: /opt/isponsorblocktv/data
+# Do not commit that directory.
+
+services:
+  isponsorblocktv:
+    image: ghcr.io/dmunozv04/isponsorblocktv:v2.11.0
+    container_name: isponsorblocktv
+    restart: unless-stopped
+    volumes:
+      - /opt/isponsorblocktv/data:/app/data
