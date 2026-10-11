@@ -3,7 +3,7 @@ title: Architecture — isponsorblocktv
 version: 0.1.0
 status: in-progress
 last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_date: 2026-10-11
 parent: README.md
 children: []
 siblings: [CHANGELOG.md, CURSOR.md, BASELINES.md, TROUBLESHOOTING.md]
@@ -65,7 +65,7 @@ Readiness stays **R1**. The process works. It has no name, no TLS, no health URL
 | Restart | `unless-stopped` |
 | User | Container default. Not a published service account. |
 
-CT 108 is a 2 GB LXC. On 2026-10-08 its swap was full before this container started. The container itself was 47.77 MiB at 17:05 PDT. See [BASELINES.md](BASELINES.md).
+CT 108 is a 4 GB LXC as of 2026-10-11 (it was 2 GB). On 2026-10-08 its swap was full before this container started. The container itself was 47.77 MiB at 17:05 PDT. See [BASELINES.md](BASELINES.md).
 
 ## 3. Network & Access
 
@@ -179,7 +179,7 @@ The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHS
 
 ## 14. Known Issues & Constraints
 
-- CT 108 swap was full on 2026-10-08. This container is small. The guest is not.
+- CT 108 swap was full on 2026-10-08. RAM is 4096 MB as of 2026-10-11. This container is small. The guest is shared.
 - YouTube revokes screen ids. A dead pairing needs a new TV code. The README of the upstream project said this was in progress in 2026.
 - Segments exist only where someone submitted them. Category filter matters: a self-promo is not a sponsor.
 - `pyytlounge` logged `Unknown state 1082` during ad skip on 2026-10-08. Playback continued.

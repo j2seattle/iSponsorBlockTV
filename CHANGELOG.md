@@ -3,7 +3,7 @@ title: Changelog — isponsorblocktv
 version: 0.1.0
 status: in-progress
 last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_date: 2026-10-11
 parent: README.md
 children: []
 siblings: [README.md, CURSOR.md, ARCHITECTURE.md]
@@ -30,6 +30,8 @@ All notable changes to **isponsorblocktv** are documented here.
 ---
 
 ## [Unreleased]
+
+- [OPS] CT 108 RAM is 4096 MB as of 2026-10-11. This container was not restarted.
 
 ## [0.1.1] — 2026-10-08
 

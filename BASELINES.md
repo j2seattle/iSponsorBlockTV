@@ -3,7 +3,7 @@ title: Baselines — isponsorblocktv
 version: 0.1.0
 status: in-progress
 last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_date: 2026-10-11
 parent: ARCHITECTURE.md
 children: []
 siblings: [TROUBLESHOOTING.md, CHANGELOG.md]
@@ -65,7 +65,7 @@ One sample while a video was playing. Not a range. Thresholds are not set. Guest
 
 ## Guest memory and swap
 
-- **Normal range:** not yet measured. At 16:53 PDT the guest had 84 MB available of 2048 MB, and swap was 511 MB of 512 MB.
+- **Normal range:** not yet measured. At 16:53 PDT on 2026-10-08 the guest had 84 MB available of 2048 MB, and swap was 511 MB of 512 MB. On 2026-10-11 RAM was raised to 4096 MB. Just after that, about 2.1 GB was available and swap was still 511 MB of 512 MB.
 - **Warning threshold:** not yet measured
 - **Critical threshold:** not yet measured
 - **Measurement source:** `sudo pct exec 108 -- free -m`
