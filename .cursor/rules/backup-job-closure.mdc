@@ -1,0 +1,27 @@
+---
+description: A backup job is not done until it has run clean on its schedule, and every failure alert gets a plain answer. LAB-DEC-053.
+alwaysApply: true
+---
+
+# Backup jobs: prove it, then close the loop (Yingson Labs)
+
+Does **not** apply to WavePoint.
+
+## Adding or changing a backup job (Kopia, PBS, rsync, a dump timer)
+
+Before you call it done, show all four:
+
+1. Files the app keeps open are excluded **before** the first run.
+2. It has a schedule. For a laptop Kopia source, `kopia policy show "<path>"` shows `Snapshot interval` **defined for this target**. The laptop global policy has none (INC-20261023-01).
+3. One run finished clean: `kopia snapshot list "<path>"` shows no `errors:`, or the job's own success line.
+4. The Kuma freshness monitor covers it (`kopia-freshness` on CT 135 for Kopia, `pbs-last-good-backup` for PBS), or you say why not.
+
+## Jason asks about a failure alert
+
+Answer in the first line, in one of these forms, with the evidence under it:
+
+- **"Failed once, now fixed"** — and the clean run that proves it, plus the next scheduled run.
+- **"Still failing"** — and the cause, or what you are checking next.
+- **"Not a failure"** — and why the alert fired.
+
+Then log the incident (incident-log rule). If a job could fail or stop running without an alert, that is a gap: fix it or add a WISH item.

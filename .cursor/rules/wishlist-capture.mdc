@@ -1,0 +1,28 @@
+---
+description: Ideas, deferred fixes and future projects go to lab-standards/WISHLIST.md in the same session, without asking first. LAB-DEC-052 / LAB-DEC-054.
+alwaysApply: true
+---
+
+# Wishlist capture is automatic (Yingson Labs)
+
+**An idea came up → it goes in `lab-standards/WISHLIST.md` this session.** Do not ask Jason first. Tell him which `WISH-###` you added.
+
+Does **not** apply to WavePoint.
+
+## Triggers
+
+- Jason says "consider", "maybe later", "eventually", "it would be nice", or names a future project.
+- You find a fix or improvement and leave it because it is out of scope.
+- A decision sets an option aside "for now" or "revisit later".
+- An incident follow-up is an idea, not a step someone owns.
+
+## How
+
+1. `grep -in "<word>" lab-standards/WISHLIST.md`. If it is there, add to that item instead.
+2. Next free id (WISHLIST §3), a row or entry in the right §4 group, slugs from `SERVICE-SLUG-REGISTRY.md`.
+3. Say what already exists that overlaps and what to check first. Mark unchecked facts unverified.
+4. Prepend `lab-standards/CHANGELOG.md`; adding an idea is `no decision`.
+
+## Not a wishlist item
+
+Work done this session, an incident (INCIDENT-LOG), or a choice already made (decision log). A service-only nicety may stay in that repo's own backlog.
