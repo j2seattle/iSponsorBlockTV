@@ -1,0 +1,26 @@
+---
+description: Every change that adds, removes, upgrades, replaces or retires a tool or service updates lab-standards/TOOLS.yaml in the same change. LAB-DEC-087.
+alwaysApply: true
+---
+
+# TOOLS.yaml stays current (Yingson Labs)
+
+**A tool or service changed → `lab-standards/TOOLS.yaml` changes in the same session.** Do not wait to be asked. Command Center (Documentation, Tools) reads it from a read-only clone that CT 139 commandcenter pulls every 15 minutes, so there is no sync script, commit or deploy of `commandcenter` to do.
+
+Does **not** apply to WavePoint.
+
+## Triggers
+
+- A new service, guest app, container, exporter, agent, laptop app or hosted service: add an entry.
+- An upgrade: change `version`.
+- A replacement: mark the old one `abandoned` (or `suspended`) with a `note`, and add the new one.
+- A removal or retirement: change `status` and the `note`. Keep the entry.
+- A move to another guest: change `runs_on`. A corrected or verified source: change `source` and `license`.
+- The Tools page card "Not in Tools yet" (weekly drift check) lists something: fix the entry. The check never edits the file itself.
+
+## How
+
+1. `grep -in "<name>" lab-standards/TOOLS.yaml`. Edit the entry if it is there.
+2. Fields: `name`, `slug` (from `SERVICE-SLUG-REGISTRY.md` for services), `what` (one sentence, what it does in this lab), `category`, `runs_on` (for example `CT 139 commandcenter`), `source` (verified official URL, or `lab-built`), `license` (SPDX id), `version`, `status`, `repo`, optional `note`.
+3. Write `unknown` for any field you have not verified. Do not guess.
+4. Prepend `lab-standards/CHANGELOG.md` when the entry is the only lab-standards change; otherwise one line in the change you already log.
