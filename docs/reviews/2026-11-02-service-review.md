@@ -216,9 +216,9 @@ Command Center has the TOOLS.yaml row and icon. The container metrics carry serv
 
 | What | How | Page | Refresh | Wish |
 |---|---|---|---|---|
-| Pairing heartbeat: time of the last 'Refreshed auth' line per device, shown as 'paired and alive' or 'silent for N hours' | Alloy loki.process counter on the container's logs, exported to Prometheus (like loki_process_custom_karakeep_*); fallback Loki count_over_time | Services > isponsorblocktv | 5 minutes | NEW:isponsorblocktv-log-heartbeat |
-| Last video seen and skips counted this month | Same counter on 'Playing video' and 'Skipping segment' | Services > isponsorblocktv | 15 minutes | NEW:isponsorblocktv-log-heartbeat |
-| Container state, image tag and version against upstream latest | Prometheus docker_container_info{container="isponsorblocktv"} plus the GitHub releases API for dmunozv04/iSponsorBlockTV | Services > isponsorblocktv, and Patching | 1 minute for state, daily for upstream | NEW:isponsorblocktv-log-heartbeat |
+| Pairing heartbeat: time of the last 'Refreshed auth' line per device, shown as 'paired and alive' or 'silent for N hours' | Alloy loki.process counter on the container's logs, exported to Prometheus (like loki_process_custom_karakeep_*); fallback Loki count_over_time | Services > isponsorblocktv | 5 minutes | WISH-316 |
+| Last video seen and skips counted this month | Same counter on 'Playing video' and 'Skipping segment' | Services > isponsorblocktv | 15 minutes | WISH-316 |
+| Container state, image tag and version against upstream latest | Prometheus docker_container_info{container="isponsorblocktv"} plus the GitHub releases API for dmunozv04/iSponsorBlockTV | Services > isponsorblocktv, and Patching | 1 minute for state, daily for upstream | WISH-316 |
 
 ## Join keys and deep links
 
@@ -251,9 +251,9 @@ Command Center has the TOOLS.yaml row and icon. The container metrics carry serv
 
 | Who gains | What | Effort | Check first | Wish |
 |---|---|---|---|---|
-| Alertmanager and #alerts | One alert that names the cause when the pairing heartbeat stops: container state from Prometheus plus the silent log counter, instead of a person noticing a missed skip | M | Whether Alloy on CT 108 can add a loki.process counter without restarting the other containers; Jason's answer on MON-01 about the R1 decision | NEW:isponsorblocktv-log-heartbeat |
-| Alloy and every no-port container (gluetun, flaresolverr, unpackerr, decluttarr) | A shared pattern: mask secrets in logs before they reach Loki and count a heartbeat line per container | M | Which log lines carry tokens in each of those containers | NEW:isponsorblocktv-token-redaction |
-| Aegis (version watch) | Add the image and tag to the version watch so a new iSponsorBlockTV release is noticed; the project releases every 1 to 2 months | S | Whether Aegis reads TOOLS.yaml version fields or Prometheus | NEW:isponsorblocktv-log-heartbeat |
+| Alertmanager and #alerts | One alert that names the cause when the pairing heartbeat stops: container state from Prometheus plus the silent log counter, instead of a person noticing a missed skip | M | Whether Alloy on CT 108 can add a loki.process counter without restarting the other containers; Jason's answer on MON-01 about the R1 decision | WISH-316 |
+| Alloy and every no-port container (gluetun, flaresolverr, unpackerr, decluttarr) | A shared pattern: mask secrets in logs before they reach Loki and count a heartbeat line per container | M | Which log lines carry tokens in each of those containers | WISH-355 |
+| Aegis (version watch) | Add the image and tag to the version watch so a new iSponsorBlockTV release is noticed; the project releases every 1 to 2 months | S | Whether Aegis reads TOOLS.yaml version fields or Prometheus | WISH-316 |
 
 ## Wishlist verdicts
 

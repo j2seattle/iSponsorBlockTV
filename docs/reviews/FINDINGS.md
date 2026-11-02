@@ -75,7 +75,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** verified
 - **Evidence:** ARCHITECTURE section 13 already says 'Logs print lounge tokens'. Live: Loki count_over_time({container="isponsorblocktv"} |= "lounge id token") is 2 in 24 h and 33 in 30 d, so each daily 'Refreshed auth' line (one per paired device) is kept in Loki, which anyone with Loki read access can query. labread's own mask did not catch the 'lounge id token <value>' form, and two token values reached this lane's output (see incident_notes). The tokens refresh daily; whether an old token still controls a TV was not tested.
 - **Fix:** In the Alloy config on CT 108 add a loki.process stage.replace that rewrites 'lounge id token <value>' to '<masked>' before it ships (Alloy lives in the docker-host lane; needs an Alloy restart, after hours). Add the same pattern to labread's mask list. Treat the stored lines as exposed to anyone with Loki read: tell Jason, and if a rotation is wanted, re-pairing both TVs issues new credentials. Undo: revert the Alloy config.
-- **Links:** WISH-174, NEW:isponsorblocktv-token-redaction
+- **Links:** WISH-174, WISH-355
 
 ### SEC-03: The container runs with default privileges: root user, writable filesystem, all capabilities, no limits
 
@@ -83,7 +83,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** unverified (labread refused the docker inspect fields for CapDrop, ReadonlyRootfs, SecurityOpt and limits, and refused docker exec id; the compose file shows none are set but the runtime values were not read.)
 - **Evidence:** docker-compose.yml (12 lines) sets only image, container_name, restart and one volume: no user, read_only, cap_drop, security_opt no-new-privileges, mem_limit or pids_limit. docker inspect shows Config.User empty (default user), Privileged false, no socket mount, bridge network, no published port, RestartCount 0. A direct read of ReadonlyRootfs, CapDrop and limits was refused by labread (docker inspect fields beyond the allowed set), so the compose file is the evidence. Exposure is low: no listener, outbound only.
 - **Fix:** In a fix run test and add cap_drop: [ALL], security_opt: [no-new-privileges:true], read_only: true with a tmpfs if needed, mem_limit 256m and pids_limit 100, then recreate the container (a brief break in skipping). Undo: restore the .bak compose file and recreate.
-- **Links:** NEW:container-hardening-baseline
+- **Links:** WISH-326
 
 ## SPD
 
@@ -103,7 +103,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** verified
 - **Evidence:** Docker logs 2026-10-08 to 2026-11-01: 334 videos played, 118 with 0 segments, 11 skips, last skip 2026-10-17. ARCHITECTURE section 6 describes the log lines. KarakeepErrorBurst and similar rules show Alloy loki.process counters feeding Prometheus already work in this lab (rules list). skip_count_tracking is true, so counts go to SponsorBlock but nothing local keeps them.
 - **Fix:** Plan with MON-01: Alloy loki.process counters for 'Skipping segment', 'Playing video' and 'Connected to device' feed Prometheus; Command Center shows 'last video seen' and 'skips this month' on the Services page. No MCP and no new service. Undo: remove the Alloy stage.
-- **Links:** NEW:isponsorblocktv-log-heartbeat
+- **Links:** WISH-316
 
 ## MON
 
@@ -114,7 +114,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Evidence:** Prometheus rules list (about 90 alerting rules): none uses docker_container_*, none uses the container's logs. No monitor_status series for the slug. Kuma monitors are not wanted by decision (SERVICE-INVENTORY.md:75, LAB-STANDARDS.md:2016, ARCHITECTURE section 16). docker-host MON-01 already notes a stopped container raises no alert. The pairing can fail without the container stopping: ARCHITECTURE section 14 says YouTube revokes screen ids, and the process stays Up. The container writes a 'Refreshed auth' line for each device every day at about 20:25 UTC (58 lines from 2026-10-08 to 2026-11-01, 2 per day), which is a ready-made heartbeat. A failure would be noticed only when Jason sees an unskipped sponsor.
 - **Fix:** Alloy loki.process counter on 'Refreshed auth' for this container, label slug=isponsorblocktv, and a Prometheus rule: no increase in 26 h goes through Alertmanager to #alerts (LAB-DEC-061). Plus docker-host's container-state rule once it exists. Test with one Discord down and up with Jason's OK. Undo: remove the stage and the rule.
 - **Your call:** Jason decided no DNS, NPM, Kuma, Homarr or UniFi work for this service (R1 deliberate). Is a log-derived Prometheus alert to #alerts acceptable under that decision? It adds none of those.
-- **Links:** WISH-136, LAB-DEC-061, NEW:isponsorblocktv-log-heartbeat
+- **Links:** WISH-136, LAB-DEC-061, WISH-316
 
 ### MON-02: The SRE good-check has no stored reading, and today it would fail
 
@@ -132,7 +132,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Evidence:** /opt/isponsorblocktv/data/config.json (717 bytes, 2026-10-09) holds the screen ids for both TVs and the skip categories. ARCHITECTURE sections 7 and 8: not in git, 'not in Dashlane', Dashlane copy 'not done' (section 16), Kopia 'no additions'. LAB-STANDARDS section 6 has no isponsorblocktv line or 'no additions' entry. No Kopia source for the slug. PBS holds the whole guest nightly (newest 2026-11-01). If the file is lost, both TVs must be paired again with new codes, which needs Jason at each TV; the categories (3 of 10) would have to be re-entered from the runbook. The image comes from ghcr.io and re-pulls, so the docker-host BAK-01 image gap does not apply here.
 - **Fix:** Decide. Cheapest: write 'isponsorblocktv: no additions, PBS only; loss means re-pairing both TVs' in LAB-STANDARDS section 6 and the runbook. If a copy is wanted, add /opt/isponsorblocktv/data/config.json to the docker-host Kopia list with the SEC-01 mode, or have Jason copy it by hand to the Dashlane path. Add a freshness monitor if Kopia is used (LAB-DEC-053). Undo: remove the source.
 - **Your call:** Is PBS alone enough (re-pair both TVs if lost), or do you want a Dashlane or Kopia copy of config.json?
-- **Links:** LAB-DEC-088, LAB-DEC-053, NEW:isponsorblocktv-config-protect
+- **Links:** LAB-DEC-088, LAB-DEC-053, WISH-301
 
 ### BAK-02: No restore test covers this container's config
 
@@ -158,7 +158,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** verified
 - **Evidence:** Docker logs 2026-10-08 to 2026-11-01: 8 ERROR lines (aiohttp ClientPayloadError, 'Handle subscribe payload error', on 2026-10-10 x2, 2026-10-18 x4, 2026-10-19, 2026-10-26), 16 traceback lines, 37 WARNING lines ('Unknown state' from pyytlounge, noted as harmless in TROUBLESHOOTING.md). Earlier errors were followed by new Connected lines; the 2026-10-26 one was the last event before the quiet period (HLT-01). docker ps shows 'Up 4 days' with no (healthy) flag; the compose file has no healthcheck. RestartCount 0.
 - **Fix:** After HLT-01, add a compose healthcheck that fails when no log or heartbeat file has changed in 26 h (or accept the Prometheus alert in MON-01 instead). Recreate needs a short break in skipping. Undo: revert the compose file.
-- **Links:** NEW:container-hardening-baseline
+- **Links:** WISH-326
 
 ## DOC
 
@@ -208,4 +208,4 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** unverified (The Command Center Services page was not opened; only the metric labels and TOOLS.yaml were read.)
 - **Evidence:** Preflight: 'Prometheus ok, no service or host label found' for the slug. Live: docker_container_info{container="isponsorblocktv"} has service=docker-host, host=docker, compose_project=isponsorblocktv. The Services row comes from TOOLS.yaml (what, lab_use present) and has an icon (serviceIcons.ts:87), but there is no health, last-activity or link on it. The Command Center page itself was not read.
 - **Fix:** Join on container name or compose_project to the slug in Command Center, and show state, last 'Refreshed auth' time, and last video seen once INT-01 exists. Link to Portainer's container page. Undo: remove the panel.
-- **Links:** NEW:isponsorblocktv-log-heartbeat
+- **Links:** WISH-316
