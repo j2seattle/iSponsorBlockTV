@@ -175,7 +175,7 @@ Restarting the container or editing `config.json` is a human action on CT 108. N
 
 The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHSA-56v3-jrq2-4q9m). This install does not use auto-discovery.
 
-`config.json` can remote-control the Living Room TV and the Office TV. It stays on CT 108, mode whatever the root-owned file was written as, and is gitignored. Logs print lounge tokens. Do not paste container logs into chat or tickets.
+`config.json` can remote-control the Living Room TV and the Office TV. It stays on CT 108, mode 600 (folder 700, set 2026-11-02, SEC-01), and is gitignored. Logs print lounge tokens. Do not paste container logs into chat or tickets.
 
 ## 14. Known Issues & Constraints
 
@@ -197,3 +197,9 @@ The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHS
 - Gate 8: one container memory sample. Warning and critical thresholds are not set.
 - Dashlane copy of `config.json` is not done.
 - Intro, outro, preview, hook, exclusive access, filler, and music off-topic stay off.
+
+## Sprint 1 fix run notes (2026-11-02, lane FAM)
+
+- **Hardened compose (SEC-03):** `cap_drop: [ALL]`, `security_opt: [no-new-privileges:true]`, `read_only: true` with a `/tmp` tmpfs, `mem_limit: 256m`, `pids_limit: 100`. The container runs as root, reads `config.json` as its owner, and started cleanly. Undo: copy `docker-compose.yml.bak-s1-20261102` back and run `docker compose up -d`.
+- **Not done:** the TV skip test (HLT-01, Jason), a healthcheck (HLT-02, waits on HLT-01), the backup choice (BAK-01, Jason) and the config.json check in the CT 108 scratch restore (BAK-02, lane PLAT).
+- **Logs show lounge tokens:** the 'Refreshed auth' line prints the start of a token. Mask it (`sed -E 's/(token )[A-Za-z0-9_-]+/\1<masked>/'`) before reading.

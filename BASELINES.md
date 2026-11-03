@@ -38,8 +38,8 @@ Samples from 2026-10-08 (while a video played) and 2026-11-02 (idle). Not a rang
 
 ## Container memory
 
-- **Normal range:** not yet measured. Two readings: 47.77 MiB while a video played (2026-10-08) and 15.79 MiB idle (2026-11-02, `docker stats`).
-- **Warning threshold:** not yet measured
+- **Normal range:** not yet measured. Three readings: 47.77 MiB while a video played (2026-10-08), 15.79 MiB idle (2026-11-02) and 50.35 MiB just after the hardened recreate (2026-11-03, limit now 256 MiB). Two more samples over a week are needed for a range.
+- **Warning threshold:** 100 MiB (a starting guess, not measured)
 - **Critical threshold:** not yet measured
 - **Measurement source:** `sudo pct exec 108 -- docker stats --no-stream isponsorblocktv` from `jason@192.168.30.209`
 - **Known false-positive conditions:** CT 108's other containers dominate guest memory. A guest-wide number is not this service.

@@ -30,19 +30,19 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 | ID | Sev | Title | Standard | Owner | Effort | Approval | Your call | Checked | State |
 |---|---|---|---|---|---|---|---|---|---|
-| SEC-01 | medium | config.json holds the TV pairing credentials and is readable by every user on CT 108 | LAB-STANDARDS §9 | jason | S | remediate | No | verified | new |
+| SEC-01 | medium | config.json holds the TV pairing credentials and is readable by every user on CT 108 | LAB-STANDARDS §9 | jason | S | remediate | No | verified | fixed (verified) 2026-11-02 |
 | SEC-02 | medium | The container writes lounge session tokens to its logs, and they are stored in Loki | LAB-STANDARDS §9 | chief | M | remediate | No | verified | new |
 | MON-01 | medium | A dead container or a broken TV pairing raises no alert | LAB-STANDARDS §7 | chief | M | remediate | Yes | verified | new |
-| BAK-01 | medium | The pairing config has one copy (the PBS guest backup) and no protect-list line | LAB-DEC-088 | jason | S | none | Yes | verified | new |
-| HLT-01 | medium | No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing | SERVICE-REVIEW G | jason | S | none | Yes | unverified | still open (accepted risk, Jason 2026-11-02, INC-20261102-03) |
+| BAK-01 | medium | The pairing config has one copy (the PBS guest backup) and no protect-list line | LAB-DEC-088 | jason | S | none | Yes | verified | needs Jason |
+| HLT-01 | medium | No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing | SERVICE-REVIEW G | jason | S | none | Yes | unverified | needs Jason |
 | DOC-03 | medium | Readiness is recorded as R1 'deliberate'; the live checks support R0 | Gate 2 | chief | S | none | No | verified | fixed (verified) |
 | PAT-01 | low | No upgrade-backlog row and no release watcher for this image | LAB-STANDARDS §12 | chief | S | none | No | verified | fixed (verified) |
-| SEC-03 | low | The container runs with default privileges: root user, writable filesystem, all capabilities, no limits | LAB-STANDARDS §9 | chief | S | remediate | No | unverified | new |
-| SPD-01 | low | No measured baseline, and Prometheus has no CPU or memory series for the container | Gate 8 | chief | S | none | No | verified | new |
+| SEC-03 | low | The container runs with default privileges: root user, writable filesystem, all capabilities, no limits | LAB-STANDARDS §9 | chief | S | remediate | No | unverified | fixed (verified) 2026-11-02 |
+| SPD-01 | low | No measured baseline, and Prometheus has no CPU or memory series for the container | Gate 8 | chief | S | none | No | verified | still open |
 | INT-01 | low | Nothing in the lab reads this container's skip activity, though it is easy to count | none | chief | M | none | No | verified | new |
 | MON-02 | low | The SRE good-check has no stored reading, and today it would fail | SERVICE-REVIEW E | chief | S | none | No | verified | fixed (verified) |
-| BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | new |
-| HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | new |
+| BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | needs PLAT |
+| HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | still open |
 | DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | DOC-04 | low | The preflight and the run plan say 'no repo for this slug' although the repo exists | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
@@ -64,11 +64,12 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### SEC-01: config.json holds the TV pairing credentials and is readable by every user on CT 108
 
-- **Severity:** medium · **Effort:** S · **Approval:** remediate · **Owner:** jason · **Standard:** LAB-STANDARDS §9 · **State:** new
+- **Severity:** medium · **Effort:** S · **Approval:** remediate · **Owner:** jason · **Standard:** LAB-STANDARDS §9 · **State:** fixed (verified) 2026-11-02
 - **Checked:** verified
 - **Evidence:** stat -c '%a %U:%G' /opt/isponsorblocktv/data/config.json -> 644 root:root, 717 bytes; folder drwxr-xr-x root. ARCHITECTURE section 13 says the file 'can remote-control the Living Room TV and the Office TV' and 'mode whatever the root-owned file was written as'. Contents were not read. The host review notes an agentread user exists on CT 108 (purpose unverified). The data folder is gitignored (.gitignore:7, git check-ignore confirms).
 - **Fix:** In a fix run: chmod 600 /opt/isponsorblocktv/data/config.json and chmod 700 /opt/isponsorblocktv/data. The container runs as the default user (root) and reads the file as root, so no restart is expected; confirm with one 'Refreshed auth' line afterwards. Undo: chmod 644 / 755.
 - **Links:** WISH-128, WISH-148
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** Ran `chmod 600 /opt/isponsorblocktv/data/config.json` and `chmod 700 /opt/isponsorblocktv/data` on CT 108 (about 23:38 Pacific). Verified by behaviour: the container (root) still reads the file (`wc -c` gives 717 bytes through `docker exec`) and the process kept running. The daily 'Refreshed auth' line is due at 20:25 tonight; check that it still appears. Undo: `chmod 644` on the file and `chmod 755` on the folder.
 
 ### SEC-02: The container writes lounge session tokens to its logs, and they are stored in Loki
 
@@ -80,21 +81,23 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### SEC-03: The container runs with default privileges: root user, writable filesystem, all capabilities, no limits
 
-- **Severity:** low · **Effort:** S · **Approval:** remediate · **Owner:** chief · **Standard:** LAB-STANDARDS §9 · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** remediate · **Owner:** chief · **Standard:** LAB-STANDARDS §9 · **State:** fixed (verified) 2026-11-02
 - **Checked:** unverified (labread refused the docker inspect fields for CapDrop, ReadonlyRootfs, SecurityOpt and limits, and refused docker exec id; the compose file shows none are set but the runtime values were not read.)
 - **Evidence:** docker-compose.yml (12 lines) sets only image, container_name, restart and one volume: no user, read_only, cap_drop, security_opt no-new-privileges, mem_limit or pids_limit. docker inspect shows Config.User empty (default user), Privileged false, no socket mount, bridge network, no published port, RestartCount 0. A direct read of ReadonlyRootfs, CapDrop and limits was refused by labread (docker inspect fields beyond the allowed set), so the compose file is the evidence. Exposure is low: no listener, outbound only.
 - **Fix:** In a fix run test and add cap_drop: [ALL], security_opt: [no-new-privileges:true], read_only: true with a tmpfs if needed, mem_limit 256m and pids_limit 100, then recreate the container (a brief break in skipping). Undo: restore the .bak compose file and recreate.
 - **Links:** WISH-326
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** Replaced `/opt/isponsorblocktv/docker-compose.yml` (backup `docker-compose.yml.bak-s1-20261102`) with the same file plus `cap_drop: [ALL]`, `security_opt: [no-new-privileges:true]`, `read_only: true`, `tmpfs: [/tmp]`, `mem_limit: 256m`, `pids_limit: 100`, and ran `docker compose up -d` (CT 108, about 23:41 Pacific). First try worked. Verified: `docker inspect` shows ReadonlyRootfs=true, CapDrop=[ALL], no-new-privileges, 256 MiB, 100 pids, RestartCount 0, state running, and both TV clients logged 'Refreshed auth' on start with no errors. Memory use is 50 MiB of 256. Undo: copy the backup compose file back and run `docker compose up -d`. Note: the recreate also forced a fresh auth refresh; see the output note in the final report.
 
 ## SPD
 
 ### SPD-01: No measured baseline, and Prometheus has no CPU or memory series for the container
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** Gate 8 · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** Gate 8 · **State:** still open
 - **Checked:** verified
 - **Evidence:** BASELINES.md holds one memory sample (47.77 MiB on 2026-10-08) and one CPU sample (0.00%), thresholds 'not yet measured', last_verified 2026-10-08. Live docker stats --no-stream: 15.75 MiB of 4 GiB, 0.00% CPU, 2 PIDs. The Prometheus metric list has docker_container_info but no per-container CPU or memory series, so no 7-day range can be built. The container is tiny, so sizing is fine.
 - **Fix:** Record the new reading and a range in BASELINES.md after the host's cadvisor-style metrics exist (or take three docker stats samples over a week). Set a warning of 100 MiB as a starting guess, marked as a guess. Undo: git revert.
 - **Links:** LAB-DEC-087
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** Recorded one new reading in BASELINES.md (50.35 MiB of the new 256 MiB limit, 0.00% CPU, 2 PIDs, right after the recreate) and a starting warning guess of 100 MiB, marked as a guess. The finding needs a range (three samples over a week), so it stays open for the follow-up run.
 
 ## INT
 
@@ -129,39 +132,43 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### BAK-01: The pairing config has one copy (the PBS guest backup) and no protect-list line
 
-- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** jason · **Standard:** LAB-DEC-088 · **State:** new
+- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** jason · **Standard:** LAB-DEC-088 · **State:** needs Jason
 - **Checked:** verified
 - **Evidence:** /opt/isponsorblocktv/data/config.json (717 bytes, 2026-10-09) holds the screen ids for both TVs and the skip categories. ARCHITECTURE sections 7 and 8: not in git, 'not in Dashlane', Dashlane copy 'not done' (section 16), Kopia 'no additions'. LAB-STANDARDS section 6 has no isponsorblocktv line or 'no additions' entry. No Kopia source for the slug. PBS holds the whole guest nightly (newest 2026-11-01). If the file is lost, both TVs must be paired again with new codes, which needs Jason at each TV; the categories (3 of 10) would have to be re-entered from the runbook. The image comes from ghcr.io and re-pulls, so the docker-host BAK-01 image gap does not apply here.
 - **Fix:** Decide. Cheapest: write 'isponsorblocktv: no additions, PBS only; loss means re-pairing both TVs' in LAB-STANDARDS section 6 and the runbook. If a copy is wanted, add /opt/isponsorblocktv/data/config.json to the docker-host Kopia list with the SEC-01 mode, or have Jason copy it by hand to the Dashlane path. Add a freshness monitor if Kopia is used (LAB-DEC-053). Undo: remove the source.
 - **Your call:** Is PBS alone enough (re-pair both TVs if lost), or do you want a Dashlane or Kopia copy of config.json?
 - **Links:** LAB-DEC-088, LAB-DEC-053, WISH-301
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** A choice for Jason. Option A (my recommendation): PBS only, write 'isponsorblocktv: no additions, PBS only; loss means re-pairing both TVs' in LAB-STANDARDS section 6 and the runbook. Option B: add `/opt/isponsorblocktv/data/config.json` (mode 600 now) to the docker-host Kopia list, which is lane PLAT's list, plus a freshness monitor. Option C: copy it by hand to a Dashlane note. The file is 717 bytes and the pairing codes are the only thing in it that cannot be rebuilt without Jason at both TVs.
 
 ### BAK-02: No restore test covers this container's config
 
-- **Severity:** low · **Effort:** M · **Approval:** remediate · **Owner:** chief · **Standard:** Gate 7 · **State:** new
+- **Severity:** low · **Effort:** M · **Approval:** remediate · **Owner:** chief · **Standard:** Gate 7 · **State:** needs PLAT
 - **Checked:** verified
 - **Evidence:** restore-log.jsonl:31 holds the only CT 108 test (2026-10-07, pass). The container was installed 2026-10-08, after it. ARCHITECTURE section 10: 'Gate 7 for isponsorblocktv is not tested'. WISH-020 names iSponsorBlockTV among services with no restore test.
 - **Fix:** Fold into the docker-host restore test (docker-host BAK-01): after restoring a recent CT 108 backup to a scratch CT with the network card down, check that /opt/isponsorblocktv/data/config.json is there. Do not start the container on the scratch CT with the network up: it would use the live TV credentials. Needs Jason's OK. Undo: destroy the scratch CT.
 - **Links:** WISH-020
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** The finding folds into the docker-host scratch restore of CT 108, which lane PLAT owns. Request in `parts/FAM-requests.md`: when PLAT restores CT 108, check that `/opt/isponsorblocktv/data/config.json` exists and is mode 600, with the network removed and the container not started. CT 108 has a 24G disk, so the test is small.
 
 ## HLT
 
 ### HLT-01: No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing
 
-- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** jason · **Standard:** SERVICE-REVIEW G · **State:** new
+- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** jason · **Standard:** SERVICE-REVIEW G · **State:** needs Jason
 - **Jason decision 2026-11-02:** not re-pairing the TVs now. Accepted risk, INC-20261102-03. Sprint 0 did not touch this item.
 - **Checked:** unverified (The logs cannot say whether either TV played YouTube since 2026-10-26, and testing a skip needs a person at a TV.)
 - **Evidence:** Docker logs counts (laptop grep, lines not read): last 'Connected to device' and last 'Subscribe completed' 2026-10-26 20:21:58; the last ERROR 2026-10-26 20:25:58 was a 'Handle subscribe payload error' (aiohttp TransferEncodingError); last 'Playing video' 2026-10-25 00:14; last 'Skipping segment' 2026-10-17. After the daemon restart on 2026-10-28 20:25 no new Connected line appeared in 4 days. Both devices still logged 'Refreshed auth' every day through 2026-11-01 20:25, so the process and the credentials are alive. Earlier quiet spells exist (no Connected 2026-10-12 to 2026-10-16, and 2026-10-20 to 2026-10-24) and then returned, so a quiet week can be normal when the TVs are not used.
 - **Fix:** Jason plays one YouTube video with a known sponsor on each TV and reports. If skips fail, restart the container first (docker restart, remediate) and re-pair with a new TV code if that does not help (docs/RUNBOOK.md). Undo: none needed.
 - **Your call:** Have the Living Room TV or the Office TV played YouTube since 2026-10-26, and did sponsors skip? If yes, the pairing is broken or the subscribe loop died after the 2026-10-26 error.
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** Unchanged and still Jason's: play one YouTube video with a known sponsor on each TV and report whether sponsors skip. No new 'Connected to device' line has appeared since the recreate either (the TVs are idle at night), so the logs still cannot answer it. Jason accepted the re-pair risk (INC-20261102-03).
 
 ### HLT-02: Occasional connection errors and no health check or auto-restart for a stuck loop
 
-- **Severity:** low · **Effort:** S · **Approval:** remediate · **Owner:** chief · **Standard:** SERVICE-REVIEW G · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** remediate · **Owner:** chief · **Standard:** SERVICE-REVIEW G · **State:** still open
 - **Checked:** verified
 - **Evidence:** Docker logs 2026-10-08 to 2026-11-01: 8 ERROR lines (aiohttp ClientPayloadError, 'Handle subscribe payload error', on 2026-10-10 x2, 2026-10-18 x4, 2026-10-19, 2026-10-26), 16 traceback lines, 37 WARNING lines ('Unknown state' from pyytlounge, noted as harmless in TROUBLESHOOTING.md). Earlier errors were followed by new Connected lines; the 2026-10-26 one was the last event before the quiet period (HLT-01). docker ps shows 'Up 4 days' with no (healthy) flag; the compose file has no healthcheck. RestartCount 0.
 - **Fix:** After HLT-01, add a compose healthcheck that fails when no log or heartbeat file has changed in 26 h (or accept the Prometheus alert in MON-01 instead). Recreate needs a short break in skipping. Undo: revert the compose file.
 - **Links:** WISH-326
+- **Fix run 2026-11-02 (lane FAM, Sprint 1):** The finding says to add the healthcheck after HLT-01 is answered. Nothing changed. A container healthcheck cannot read the Docker log, so the 26 hour rule would need a heartbeat file written by the app, which it does not write; the better answer may be the MON-01 Prometheus alert instead. Decide after HLT-01.
 
 ## DOC
 
