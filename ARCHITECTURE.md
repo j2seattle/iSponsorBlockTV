@@ -48,9 +48,9 @@ last_verified: 2026-10-08
 
 ## 1. Overview
 
-A pinned container of [iSponsorBlockTV](https://github.com/dmunozv04/iSponsorBlockTV) v2.11.0. It joins a paired TV's YouTube lounge session, asks SponsorBlock where the segments are, and sends skip or mute commands. Lab copy: [https://github.com/j2seattle/iSponsorBlockTV](https://github.com/j2seattle/iSponsorBlockTV).
+A pinned container of [iSponsorBlockTV](https://github.com/dmunozv04/iSponsorBlockTV) v2.11.0. It joins the YouTube lounge session on the Living Room TV and the Office TV, asks SponsorBlock where the segments are, and sends skip or mute commands. Lab copy: [https://github.com/j2seattle/iSponsorBlockTV](https://github.com/j2seattle/iSponsorBlockTV).
 
-One TV was paired on 2026-10-08. The YouTube app named it "YouTube on TV". Jason confirmed self-promo and paid-sponsor skips on Grind Hard Plumbing Co, `FrRDJb0WBf0`.
+The Living Room TV and the Office TV are both paired. The first was paired on 2026-10-08, and Jason confirmed self-promo and paid-sponsor skips that evening on Grind Hard Plumbing Co, `FrRDJb0WBf0`. The second was paired on 2026-10-09, and Jason confirmed skips the same night. The YouTube app reports both as "YouTube on TV". Skip categories are shared.
 
 Readiness stays **R1**. The process works. It has no name, no TLS, no health URL, and no monitor, so R2 and R3 are not available. That is recorded in §3 and §11, not left blank.
 
@@ -175,7 +175,7 @@ Restarting the container or editing `config.json` is a human action on CT 108. N
 
 The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHSA-56v3-jrq2-4q9m). This install does not use auto-discovery.
 
-`config.json` can remote-control the paired YouTube session. It stays on CT 108, mode whatever the root-owned file was written as, and is gitignored. Logs print lounge tokens. Do not paste container logs into chat or tickets.
+`config.json` can remote-control the Living Room TV and the Office TV. It stays on CT 108, mode whatever the root-owned file was written as, and is gitignored. Logs print lounge tokens. Do not paste container logs into chat or tickets.
 
 ## 14. Known Issues & Constraints
 
@@ -184,7 +184,7 @@ The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHS
 - Segments exist only where someone submitted them. Category filter matters: a self-promo is not a sponsor.
 - `pyytlounge` logged `Unknown state 1082` during ad skip on 2026-10-08. Playback continued.
 - Shorts are only partly supported upstream.
-- One device is paired. Its display name is the generic "YouTube on TV".
+- The Living Room TV and the Office TV are both paired. Logs show both as "YouTube on TV", so a log line does not say which room it was.
 
 ## 15. Operational Procedures
 
@@ -196,5 +196,4 @@ The container has no inbound port. v2.11.0 fixes a DIAL auto-discovery SSRF (GHS
 - Gate 7: a PBS snapshot taken after 2026-10-08 has not been restored.
 - Gate 8: one container memory sample. Warning and critical thresholds are not set.
 - Dashlane copy of `config.json` is not done.
-- More TVs, when Jason wants them.
 - Intro, outro, preview, hook, exclusive access, filler, and music off-topic stay off.

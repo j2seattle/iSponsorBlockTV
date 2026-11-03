@@ -3,13 +3,13 @@ title: Runbook — isponsorblocktv
 version: 0.1.0
 status: in-progress
 last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_date: 2026-10-09
 parent: ARCHITECTURE.md
 children: []
 siblings: [TROUBLESHOOTING.md]
 audience: ops
 tags: [yingson-labs, isponsorblocktv, runbook]
-summary: "Restart, logs, categories, and pairing for the CT 108 container."
+summary: "Restart, logs, categories, and pairing for the Living Room TV and the Office TV."
 doc_type: runbook
 scope: service
 service_name: isponsorblocktv
@@ -18,12 +18,14 @@ depends_on: [docker-host]
 depended_on_by: []
 agent_context: true
 permission_tier: read-only
-last_verified: 2026-10-08
+last_verified: 2026-10-09
 ---
 
 # Runbook — isponsorblocktv
 
 SSH to the hypervisor as `jason@192.168.30.209`. Every `pct` command needs `sudo`. After `sudo pct exec 108` the guest command runs as root, so do not add another sudo.
+
+This container protects the Living Room TV and the Office TV. Both YouTube apps report the name "YouTube on TV", so logs do not say which room connected.
 
 ## See that it is connected
 

@@ -18,7 +18,7 @@ depends_on: []
 depended_on_by: []
 agent_context: false
 permission_tier: n-a
-last_verified: 2026-10-08
+last_verified: 2026-10-09
 ---
 
 # Changelog
@@ -32,6 +32,10 @@ All notable changes to **isponsorblocktv** are documented here.
 ## [Unreleased]
 
 - [OPS] CT 108 RAM is 4096 MB as of 2026-10-11. This container was not restarted.
+
+## [0.1.2] — 2026-10-09
+
+- [OPS] A second TV is paired on the same container. Jason confirmed skips the same night. The Living Room TV and the Office TV are both protected. Skip categories stay shared. The YouTube app still reports both as "YouTube on TV".
 
 ## [0.1.1] — 2026-10-08
 
