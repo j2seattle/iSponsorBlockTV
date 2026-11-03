@@ -34,18 +34,18 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 | SEC-02 | medium | The container writes lounge session tokens to its logs, and they are stored in Loki | LAB-STANDARDS §9 | chief | M | remediate | No | verified | new |
 | MON-01 | medium | A dead container or a broken TV pairing raises no alert | LAB-STANDARDS §7 | chief | M | remediate | Yes | verified | new |
 | BAK-01 | medium | The pairing config has one copy (the PBS guest backup) and no protect-list line | LAB-DEC-088 | jason | S | none | Yes | verified | new |
-| HLT-01 | medium | No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing | SERVICE-REVIEW G | jason | S | none | Yes | unverified | new |
-| DOC-03 | medium | Readiness is recorded as R1 'deliberate'; the live checks support R0 | Gate 2 | chief | S | none | No | verified | new |
-| PAT-01 | low | No upgrade-backlog row and no release watcher for this image | LAB-STANDARDS §12 | chief | S | none | No | verified | new |
+| HLT-01 | medium | No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing | SERVICE-REVIEW G | jason | S | none | Yes | unverified | still open (accepted risk, Jason 2026-11-02, INC-20261102-03) |
+| DOC-03 | medium | Readiness is recorded as R1 'deliberate'; the live checks support R0 | Gate 2 | chief | S | none | No | verified | fixed (verified) |
+| PAT-01 | low | No upgrade-backlog row and no release watcher for this image | LAB-STANDARDS §12 | chief | S | none | No | verified | fixed (verified) |
 | SEC-03 | low | The container runs with default privileges: root user, writable filesystem, all capabilities, no limits | LAB-STANDARDS §9 | chief | S | remediate | No | unverified | new |
 | SPD-01 | low | No measured baseline, and Prometheus has no CPU or memory series for the container | Gate 8 | chief | S | none | No | verified | new |
 | INT-01 | low | Nothing in the lab reads this container's skip activity, though it is easy to count | none | chief | M | none | No | verified | new |
-| MON-02 | low | The SRE good-check has no stored reading, and today it would fail | SERVICE-REVIEW E | chief | S | none | No | verified | new |
+| MON-02 | low | The SRE good-check has no stored reading, and today it would fail | SERVICE-REVIEW E | chief | S | none | No | verified | fixed (verified) |
 | BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | new |
 | HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | new |
-| DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | new |
-| DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | new |
-| DOC-04 | low | The preflight and the run plan say 'no repo for this slug' although the repo exists | SERVICE-REVIEW H | chief | S | none | No | verified | new |
+| DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
+| DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
+| DOC-04 | low | The preflight and the run plan say 'no repo for this slug' although the repo exists | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | USE-01 | low | A few settings are not used; none is clearly worth turning on | SERVICE-REVIEW I | chief | S | none | No | unverified | new |
 | CC-01 | low | Command Center cannot show this container: its metrics carry the docker-host label, not the slug | SERVICE-REVIEW J | chief | M | none | No | unverified | new |
 
@@ -53,7 +53,8 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### PAT-01: No upgrade-backlog row and no release watcher for this image
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** LAB-STANDARDS §12 · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** LAB-STANDARDS §12 · **State:** fixed (verified)
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** Section 12 row added in branch s0/FAM (running v2.11.0, upstream v2.11.0, tag pin, GitHub releases, checked 2026-11-02). Live: docker ps shows ghcr.io/dmunozv04/isponsorblocktv:v2.11.0. Adding the image to a version watcher for CT 108 is not done (no watcher exists in the docs); that part is carried by the lab-wide upgrade-check work.
 - **Checked:** verified
 - **Evidence:** Running v2.11.0 equals upstream latest v2.11.0 (GitHub releases API: v2.11.0 2026-08-21, v2.10.0 2026-07-13, v2.9.0 2026-05-09), so there is no gap today. grep for isponsorblocktv in LAB-STANDARDS.md finds only lines 1465 and 2016, no section 12 row. Compose pins the tag, not the digest (docker-compose.yml:7); UPSTREAM.txt holds the digest and its first 12 characters match the live image id d1e876636754. Releases came every 1 to 2 months in 2026. No What's Up Docker result for CT 108 was found.
 - **Fix:** In a fix run, add a section 12 upgrade backlog row (running v2.11.0, upstream v2.11.0, tag pin, source GitHub releases, checked 2026-11-02) and add this image to whatever version watch covers CT 108. Optionally pin tag plus digest in compose. Undo: git revert.
@@ -118,7 +119,8 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### MON-02: The SRE good-check has no stored reading, and today it would fail
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW E · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW E · **State:** fixed (verified)
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** SRE-AGENT-CATALOG good-check now uses the daily 'Refreshed auth' line (two devices within 26 h) and says a quiet 'Connected to device' spell is normal (branch s0/FAM). Live 2026-11-02: 2 'Refreshed auth' lines in the last 26 h. A stored reading is still not recorded; HLT-01 is unanswered.
 - **Checked:** verified
 - **Evidence:** SRE-AGENT-CATALOG.md:182: good-check is 'container is running and a recent log line says Connected to device'; 'Reading not stored. No health URL. watch: no'. Live: the container is running, but the last 'Connected to device' line is 2026-10-26 20:21 UTC, 6 days ago (see HLT-01). The check has no definition of 'recent'.
 - **Fix:** Change the check to the daily 'Refreshed auth' line (two devices, within 26 h) and store one reading after HLT-01 is answered. Doc change in the catalog. Undo: git revert.
@@ -147,6 +149,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 ### HLT-01: No 'Connected to device' line for 6 days; cannot tell an idle TV from a lost pairing
 
 - **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** jason · **Standard:** SERVICE-REVIEW G · **State:** new
+- **Jason decision 2026-11-02:** not re-pairing the TVs now. Accepted risk, INC-20261102-03. Sprint 0 did not touch this item.
 - **Checked:** unverified (The logs cannot say whether either TV played YouTube since 2026-10-26, and testing a skip needs a person at a TV.)
 - **Evidence:** Docker logs counts (laptop grep, lines not read): last 'Connected to device' and last 'Subscribe completed' 2026-10-26 20:21:58; the last ERROR 2026-10-26 20:25:58 was a 'Handle subscribe payload error' (aiohttp TransferEncodingError); last 'Playing video' 2026-10-25 00:14; last 'Skipping segment' 2026-10-17. After the daemon restart on 2026-10-28 20:25 no new Connected line appeared in 4 days. Both devices still logged 'Refreshed auth' every day through 2026-11-01 20:25, so the process and the credentials are alive. Earlier quiet spells exist (no Connected 2026-10-12 to 2026-10-16, and 2026-10-20 to 2026-10-24) and then returned, so a quiet week can be normal when the TVs are not used.
 - **Fix:** Jason plays one YouTube video with a known sponsor on each TV and reports. If skips fail, restart the container first (docker restart, remediate) and re-pair with a new TV code if that does not help (docs/RUNBOOK.md). Undo: none needed.
@@ -164,21 +167,24 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### DOC-01: ARCHITECTURE, BASELINES and CHANGELOG are behind the live container
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** Done in the clean files: BASELINES (memory 15.79 MiB, swap 122 of 512 MiB live, last_verified) and TROUBLESHOOTING (quiet-spell note, the 2026-10-26 subscribe error). Not done: ARCHITECTURE, CHANGELOG, README, CURSOR and RUNBOOK all hold another session's uncommitted edits (rule 7), so the restart note, the config.json mode 644 and the CHANGELOG line were not written. Live: config.json is 644 root, container up since the 2026-10-28 daemon restart.
 - **Checked:** verified
 - **Evidence:** Live: Up 4 days since a daemon restart on 2026-10-28 20:25 UTC (not in CHANGELOG); memory 15.75 MiB against 47.77 MiB in BASELINES.md; swap on CT 108 is 111 of 512 MiB, but BASELINES.md and ARCHITECTURE section 14 say 511 of 512 (docker-host HLT-03); config.json mode is 644, ARCHITECTURE section 13 says 'whatever the root-owned file was written as'; Connected/skip gaps (HLT-01) not recorded; the 2026-10-26 subscribe error is not in TROUBLESHOOTING.md. ARCHITECTURE last_verified 2026-10-08.
 - **Fix:** Update the figures, mode, and restart note in ARCHITECTURE, BASELINES, TROUBLESHOOTING and CHANGELOG; refresh last_verified on each doc the review confirmed. Undo: git revert.
 
 ### DOC-02: Doc edits are not committed, and the lab-standards sync receipt is behind
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** Skipped by rule 7: the seven modified files in the working tree belong to another session and were not reviewed, staged or committed, and the sync receipt in CLAUDE.md was not touched. Jason or that session must commit or discard them first.
 - **Checked:** verified
 - **Evidence:** git -C isponsorblocktv status --short: 7 modified files (ARCHITECTURE.md, CHANGELOG.md, CLAUDE.md, CURSOR.md, README.md, docs/RUNBOOK.md, .cursor/rules/lab-doc-contract.mdc) and 1 new file (.cursor/rules/decisions-with-docs.mdc). They hold the second-TV update of 2026-10-09 and the RAM note. HEAD ceaf4e1 (2026-10-29) has nothing unpushed. CLAUDE.md:30-37 names lab-standards 575bf04 from 2026-10-08; lab-standards is at c0c6b8c. validate-docs.py reports PASS.
 - **Fix:** In a fix run, review and commit the working-tree edits by file name, refresh the sync receipt, push the repo first and lab-standards second. Undo: git revert.
 
 ### DOC-03: Readiness is recorded as R1 'deliberate'; the live checks support R0
 
-- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** Gate 2 · **State:** new
+- **Severity:** medium · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** Gate 2 · **State:** fixed (verified)
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** Recorded level is now R0 in the inventory rows, SERVICE-READINESS and LAB-STANDARDS (the level the review proposes, approved in HLT-04), with the reason: Gate 2 fails on CT 108 (docker-host SEC-01). R1 returns when that closes or Gate 2 is waived. The ARCHITECTURE header still says R1 (dirty file, skipped). The note that R2 and R3 are unreachable for a no-port service was added to the readiness row.
 - **Checked:** verified
 - **Evidence:** SERVICE-INVENTORY.md:75, SERVICE-READINESS.md:209, ARCHITECTURE.md header and LAB-STANDARDS.md:2016 say R1. R1 needs gates 1 and 2. Gate 2 fails on CT 108 (docker-host SEC-01: no jason user, no Host alias, lab key refused). The container itself works and the gap belongs to the host, but the cumulative rule gives R0. See the readiness conflict.
 - **Fix:** Close docker-host SEC-01 (then R1 holds), or lower the recorded level to R0 until it is closed. Also state in the readiness docs that R2 and R3 are not reachable for a no-port service, but a log-based alert (MON-01) is the lab's way to notice failures. Undo: git revert.
@@ -186,7 +192,8 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### DOC-04: The preflight and the run plan say 'no repo for this slug' although the repo exists
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** new
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Fix run 2026-11-02 (Sprint 0, lane FAM):** The fix is a change to review-preflight.py in lab-standards, which is not this lane's file. Listed in FAM-ls-text.md for the lab-standards owner.
 - **Checked:** verified
 - **Evidence:** Evidence file preflight row 'Repo, HEAD, doc last_verified ages': 'no repo for this slug; results folder lab-standards/service-reviews/isponsorblocktv/'. The repo isponsorblocktv exists (Gitea jason/iSponsorBlockTV, HEAD ceaf4e1) and run.json uses results_dir isponsorblocktv/docs/reviews. The preflight finds repos by slug and cannot map this one because the Gitea and GitHub names keep the upstream capitalisation (SERVICE-SLUG-REGISTRY.md:255).
 - **Fix:** Teach review-preflight.py to use the registry's repo name column or the SERVICE-SLUG-REGISTRY.md:255 exception. Doc and script change. Undo: git revert.

@@ -2,8 +2,8 @@
 title: Troubleshooting — isponsorblocktv
 version: 0.1.0
 status: in-progress
-last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_by: Claude Code
+last_edited_date: 2026-11-02
 parent: ARCHITECTURE.md
 children: []
 siblings: [BASELINES.md, CHANGELOG.md]
@@ -18,7 +18,7 @@ depends_on: [docker-host]
 depended_on_by: []
 agent_context: true
 permission_tier: read-only
-last_verified: 2026-10-08
+last_verified: 2026-11-02
 ---
 
 # Troubleshooting — isponsorblocktv
@@ -47,7 +47,11 @@ The CLI wizard reads stdin to the end. A pipe that closes on the last prompt ski
 
 ## Container is up and the TV does nothing
 
-Look for `Connected to device`. If it is missing, the screen id was revoked. Pair again with a new code from the YouTube app, **Settings → Link with TV code**. Restarting the container does not create a new code.
+Look for `Connected to device`. A quiet spell is normal when the TVs are not used: no such line appeared 2026-10-12 to 2026-10-16 or 2026-10-20 to 2026-10-24 and it came back. The daily `Refreshed auth` line (two devices, once a day) shows the process and the credentials are alive. If the TVs were used and skips stop, the screen id may have been revoked. Pair again with a new code from the YouTube app, **Settings → Link with TV code**. Restarting the container does not create a new code.
+
+## `Handle subscribe payload error` (aiohttp TransferEncodingError)
+
+Logged once on 2026-10-26 20:25 UTC, after the last `Connected to device` and `Subscribe completed` lines. The container kept running and kept refreshing auth. If skips stop after this error, restart the container first; pair again only if that does not help.
 
 ## `Unknown state 1082`
 
