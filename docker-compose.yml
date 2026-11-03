@@ -7,5 +7,15 @@ services:
     image: ghcr.io/dmunozv04/isponsorblocktv:v2.11.0
     container_name: isponsorblocktv
     restart: unless-stopped
+    # Hardening applied live in the Sprint 1 fix run (lane FAM, 2026-11-02); copied here 2026-11-03.
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 256m
+    pids_limit: 100
     volumes:
       - /opt/isponsorblocktv/data:/app/data
