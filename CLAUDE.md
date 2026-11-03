@@ -45,3 +45,8 @@ last_verified: 2026-10-08
 4. [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 GitHub: [https://github.com/j2seattle/iSponsorBlockTV](https://github.com/j2seattle/iSponsorBlockTV)
+
+
+## Session-end gate
+
+- [ ] A choice in the changelog or other docs has a decision in this same session, or the changelog says `no decision` (LAB-DEC-035)

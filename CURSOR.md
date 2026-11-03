@@ -3,13 +3,13 @@ title: Cursor briefing — isponsorblocktv
 version: 0.1.0
 status: in-progress
 last_edited_by: Cursor Grok
-last_edited_date: 2026-10-08
+last_edited_date: 2026-10-09
 parent: README.md
 children: []
 siblings: [CLAUDE.md, ARCHITECTURE.md, CHANGELOG.md]
 audience: internal
 tags: [yingson-labs, isponsorblocktv, agent-briefing]
-summary: "Current state of the YouTube TV sponsor-skip trial on CT 108."
+summary: "Current state of iSponsorBlockTV on CT 108, covering the Living Room TV and the Office TV."
 doc_type: agent-briefing
 scope: service
 service_name: isponsorblocktv
@@ -18,14 +18,14 @@ depends_on: [docker-host]
 depended_on_by: []
 agent_context: true
 permission_tier: read-only
-last_verified: 2026-10-08
+last_verified: 2026-10-09
 ---
 
 # Cursor — isponsorblocktv
 
 ## Now
 
-v2.11.0 on CT 108. No port. Categories `sponsor`, `selfpromo`, `interaction`. One TV paired. Jason confirmed skips on `FrRDJb0WBf0`.
+v2.11.0 on CT 108. No port. Categories `sponsor`, `selfpromo`, `interaction`. Protects the Living Room TV and the Office TV. Jason confirmed skips on both. The YouTube app names both "YouTube on TV".
 
 Lab repo: [https://github.com/j2seattle/iSponsorBlockTV](https://github.com/j2seattle/iSponsorBlockTV). Upstream: [dmunozv04/iSponsorBlockTV](https://github.com/dmunozv04/iSponsorBlockTV).
 

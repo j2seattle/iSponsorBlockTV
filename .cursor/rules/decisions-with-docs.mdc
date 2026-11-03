@@ -1,0 +1,21 @@
+---
+description: A Yingson Labs doc change that records a choice updates the decision log in the same session. LAB-DEC-035. Not WavePoint.
+alwaysApply: true
+---
+
+# Decisions move with the docs (Yingson Labs)
+
+When this session changes a changelog, standard, architecture, runbook, or inventory row, update the decision log before you finish. Do not ask first. LAB-DEC-035.
+
+Does **not** apply to WavePoint.
+
+## Same session
+
+- **A choice** is what we will do, what we will not do, or a precedent another service would copy.
+  - Lab-wide, or a precedent: next `LAB-DEC-###` in `lab-standards/LAB-DECISIONS.md`. Prepend. Never delete an old entry.
+  - One service, and no other service would copy it: that repo's decisions file. If it has none, still write a `LAB-DEC` when it is a precedent.
+- **Not a choice:** a version number, a vault confirmation, a typo. Do not invent an entry. The changelog line says `no decision`.
+
+## What this is not
+
+A second copy of the changelog. The decision holds the choice and the rejected options. The changelog holds what changed.
