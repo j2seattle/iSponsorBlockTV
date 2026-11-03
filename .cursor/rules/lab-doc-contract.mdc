@@ -50,6 +50,7 @@ Continue any work that does not depend on the answer. Record both sides next to 
 | **Any** diagnosed or addressed issue (single-service too) | `INCIDENT-LOG.md` **and** this repo `docs/incidents/INC-YYYYMMDD-##.md` — do not ask first (LAB-DEC-023 / LAB-DEC-025) |
 | Failure pattern owned by **no single** service | `TROUBLESHOOTING-CROSS-SERVICE.md` |
 | Decision affecting more than this service | `LAB-DECISIONS.md` as `LAB-DEC-###` |
+| Changelog or other doc records a choice | Decision log in the same session, or the changelog says `no decision` (LAB-DEC-035) |
 | Needed a new enum value | `GLOSSARY.md` — **add there FIRST, then use it** |
 
 **Never invent a slug or enum value locally.** Register it in `lab-standards` first. An unregistered slug is a broken graph edge that nothing warns you about; a non-canonical enum silently drops the doc out of every rollup query.
