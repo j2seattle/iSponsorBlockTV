@@ -2,8 +2,8 @@
 title: Changelog — isponsorblocktv
 version: 0.1.0
 status: in-progress
-last_edited_by: Cursor Grok
-last_edited_date: 2026-10-11
+last_edited_by: Claude Code
+last_edited_date: 2026-11-04
 parent: README.md
 children: []
 siblings: [README.md, CURSOR.md, ARCHITECTURE.md]
@@ -14,7 +14,7 @@ doc_type: changelog
 scope: service
 service_name: isponsorblocktv
 parent_doc: lab-standards/ARCHITECTURE.md
-depends_on: []
+depends_on: [docker-host]
 depended_on_by: []
 agent_context: false
 permission_tier: n-a
@@ -30,6 +30,8 @@ All notable changes to **isponsorblocktv** are documented here.
 ---
 
 ## [Unreleased]
+
+- [OPS] **2026-11-04: Sprint 0 doc fixes (push 04b, lane MAP-DATA).** Docs only. ARCHITECTURE carries the 2026-11-02 live reads and the restart history. No LAB-DEC-100 edge changes for this service (depends_on is docker-host).
 
 - [OPS] **Sprint 2 re-check, lane FAM (2026-11-03 evening).** No Sprint 2 IDs for this service. Upstream latest is still v2.11.0, the version the compose file pins. The coordinator's Docker restart (S2-01, 21:07) recreated the container with json-file logs and the hardened compose file; this repo already matches (140d8e1). CT 108 was not touched.
 

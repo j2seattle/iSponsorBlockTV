@@ -2,8 +2,8 @@
 title: Architecture — isponsorblocktv
 version: 0.1.0
 status: in-progress
-last_edited_by: Cursor Grok
-last_edited_date: 2026-10-11
+last_edited_by: Claude Code
+last_edited_date: 2026-11-04
 parent: README.md
 children: []
 siblings: [CHANGELOG.md, CURSOR.md, BASELINES.md, TROUBLESHOOTING.md]
@@ -18,7 +18,7 @@ depends_on: [docker-host]
 depended_on_by: []
 agent_context: true
 permission_tier: read-only
-last_verified: 2026-10-08
+last_verified: 2026-11-02
 ---
 
 # Architecture — iSponsorBlockTV
@@ -65,7 +65,7 @@ Readiness stays **R1**. The process works. It has no name, no TLS, no health URL
 | Restart | `unless-stopped` |
 | User | Container default. Not a published service account. |
 
-CT 108 is a 4 GB LXC as of 2026-10-11 (it was 2 GB). On 2026-10-08 its swap was full before this container started. The container itself was 47.77 MiB at 17:05 PDT. See [BASELINES.md](BASELINES.md).
+CT 108 is a 4 GB LXC as of 2026-10-11 (it was 2 GB). On 2026-10-08 its swap was full before this container started. The container itself was 47.77 MiB at 17:05 PDT. On 2026-11-02 the container used 15.75 MiB and CT 108 swap was 122 of 512 MiB (live reads, see [BASELINES.md](BASELINES.md)). The container was started again by a Docker daemon restart on 2026-10-28 at 20:25 UTC and was recreated by the Docker restart on 2026-11-03 at 21:07 (S2-01), with the hardened compose file and json-file logs.
 
 ## 3. Network & Access
 

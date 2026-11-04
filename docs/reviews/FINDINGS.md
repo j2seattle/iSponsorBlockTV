@@ -3,7 +3,7 @@ title: "Findings: isponsorblocktv"
 version: 1.0.0
 status: active
 last_edited_by: Claude Code
-last_edited_date: 2026-11-03
+last_edited_date: 2026-11-04
 audience: internal
 tags: [yingson-labs, isponsorblocktv, service-review, findings]
 summary: "Rolling list of Service Review findings for isponsorblocktv. Run 1, 2026-11-02: 18 findings."
@@ -26,6 +26,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 |---|---|---|---|---|
 | 1 | 2026-11-02 | review (read only, nothing changed on any server) | critical 0, high 0, medium 6, low 12 (18 total) | [2026-11-02-service-review.md](2026-11-02-service-review.md) |
 
+| 2 | 2026-11-04 | fix (Sprint 0 remainder, lane MAP-DATA) | fixed 1, not needed 0, still open 3 (DOC-02, DOC-04, SPD-01), needs Jason 2 (BAK-01, HLT-01) | this file |
 ## Findings
 
 | ID | Sev | Title | Standard | Owner | Effort | Approval | Your call | Checked | State |
@@ -43,7 +44,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 | MON-02 | low | The SRE good-check has no stored reading, and today it would fail | SERVICE-REVIEW E | chief | S | none | No | verified | fixed (verified) |
 | BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | needs PLAT |
 | HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | still open |
-| DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
+| DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | fixed (verified) 2026-11-04 |
 | DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | DOC-04 | low | The preflight and the run plan say 'no repo for this slug' although the repo exists | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | USE-01 | low | A few settings are not used; none is clearly worth turning on | SERVICE-REVIEW I | chief | S | none | No | unverified | new |
@@ -175,7 +176,8 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### DOC-01: ARCHITECTURE, BASELINES and CHANGELOG are behind the live container
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** fixed (verified) 2026-11-04
+- **Fix run 2026-11-04 (push 04b, lane MAP-DATA):** ARCHITECTURE section 1 now carries the 2026-11-02 live reads (15.75 MiB, swap 122 of 512 MiB), the 2026-10-28 daemon restart and the 2026-11-03 recreate, and last_verified 2026-11-02. The config.json mode 600 (folder 700) text was already in section 13 from Sprint 1. BASELINES and TROUBLESHOOTING were done in the 2026-11-02 run. Undo: git revert of the push 04b commit for this repo.
 - **Fix run 2026-11-02 (Sprint 0, lane FAM):** Done in the clean files: BASELINES (memory 15.79 MiB, swap 122 of 512 MiB live, last_verified) and TROUBLESHOOTING (quiet-spell note, the 2026-10-26 subscribe error). Not done: ARCHITECTURE, CHANGELOG, README, CURSOR and RUNBOOK all hold another session's uncommitted edits (rule 7), so the restart note, the config.json mode 644 and the CHANGELOG line were not written. Live: config.json is 644 root, container up since the 2026-10-28 daemon restart.
 - **Checked:** verified
 - **Evidence:** Live: Up 4 days since a daemon restart on 2026-10-28 20:25 UTC (not in CHANGELOG); memory 15.75 MiB against 47.77 MiB in BASELINES.md; swap on CT 108 is 111 of 512 MiB, but BASELINES.md and ARCHITECTURE section 14 say 511 of 512 (docker-host HLT-03); config.json mode is 644, ARCHITECTURE section 13 says 'whatever the root-owned file was written as'; Connected/skip gaps (HLT-01) not recorded; the 2026-10-26 subscribe error is not in TROUBLESHOOTING.md. ARCHITECTURE last_verified 2026-10-08.
@@ -184,6 +186,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 ### DOC-02: Doc edits are not committed, and the lab-standards sync receipt is behind
 
 - **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Fix run 2026-11-04 (push 04b, lane MAP-DATA):** The working-tree edits are now committed (tree clean). Still missing: the CLAUDE.md sync receipt (lab-standards 575bf04) needs a real reconcile against current lab-standards, not only a new hash.
 - **Fix run 2026-11-02 (Sprint 0, lane FAM):** Skipped by rule 7: the seven modified files in the working tree belong to another session and were not reviewed, staged or committed, and the sync receipt in CLAUDE.md was not touched. Jason or that session must commit or discard them first.
 - **Checked:** verified
 - **Evidence:** git -C isponsorblocktv status --short: 7 modified files (ARCHITECTURE.md, CHANGELOG.md, CLAUDE.md, CURSOR.md, README.md, docs/RUNBOOK.md, .cursor/rules/lab-doc-contract.mdc) and 1 new file (.cursor/rules/decisions-with-docs.mdc). They hold the second-TV update of 2026-10-09 and the RAM note. HEAD ceaf4e1 (2026-10-29) has nothing unpushed. CLAUDE.md:30-37 names lab-standards 575bf04 from 2026-10-08; lab-standards is at c0c6b8c. validate-docs.py reports PASS.
@@ -201,6 +204,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 ### DOC-04: The preflight and the run plan say 'no repo for this slug' although the repo exists
 
 - **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Fix run 2026-11-04 (push 04b, lane MAP-DATA):** lab-standards, lane MAP-DATA does it: the fix is in review-preflight.py in lab-standards, not in this repo.
 - **Fix run 2026-11-02 (Sprint 0, lane FAM):** The fix is a change to review-preflight.py in lab-standards, which is not this lane's file. Listed in FAM-ls-text.md for the lab-standards owner.
 - **Checked:** verified
 - **Evidence:** Evidence file preflight row 'Repo, HEAD, doc last_verified ages': 'no repo for this slug; results folder lab-standards/service-reviews/isponsorblocktv/'. The repo isponsorblocktv exists (Gitea jason/iSponsorBlockTV, HEAD ceaf4e1) and run.json uses results_dir isponsorblocktv/docs/reviews. The preflight finds repos by slug and cannot map this one because the Gitea and GitHub names keep the upstream capitalisation (SERVICE-SLUG-REGISTRY.md:255).
