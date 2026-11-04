@@ -31,6 +31,8 @@ All notable changes to **isponsorblocktv** are documented here.
 
 ## [Unreleased]
 
+- [OPS] **Sprint 2 re-check, lane FAM (2026-11-03 evening).** No Sprint 2 IDs for this service. Upstream latest is still v2.11.0, the version the compose file pins. The coordinator's Docker restart (S2-01, 21:07) recreated the container with json-file logs and the hardened compose file; this repo already matches (140d8e1). CT 108 was not touched.
+
 - [DOCS] **Compose file matches live (2026-11-03).** The Sprint 1 hardening (cap_drop ALL, no-new-privileges, read-only root, tmpfs /tmp, 256 MB, 100 pids) was live on CT 108 but not in git. Copied in so the CT 108 after-hours restart deploys the same file.
 - [OPS] **Sprint 1 fix run, lane FAM (2026-11-02 night, changes made 23:00 to 01:00 Pacific).** `config.json` is now mode 600 and its folder 700 (SEC-01). Compose file hardened: all capabilities dropped, no-new-privileges, read-only root, 256 MB memory limit, 100 process limit; container recreated once and running (SEC-03). A new baseline reading is in BASELINES.md. The TV test (HLT-01) and the backup choice (BAK-01) wait for Jason. Safety net: PBS backup 21 hours old and `docker-compose.yml.bak-s1-20261102`. `no decision`.
 

@@ -3,7 +3,7 @@ title: "Findings: isponsorblocktv"
 version: 1.0.0
 status: active
 last_edited_by: Claude Code
-last_edited_date: 2026-11-02
+last_edited_date: 2026-11-03
 audience: internal
 tags: [yingson-labs, isponsorblocktv, service-review, findings]
 summary: "Rolling list of Service Review findings for isponsorblocktv. Run 1, 2026-11-02: 18 findings."
@@ -13,7 +13,7 @@ service_name: isponsorblocktv
 parent_doc: lab-standards/ARCHITECTURE.md
 agent_context: true
 permission_tier: n-a
-last_verified: 2026-11-02
+last_verified: 2026-11-03
 ---
 
 Page: https://claude.ai/artifact/VQ9GcTxCT3wsUCbQTF6k9H (private)
@@ -59,6 +59,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Evidence:** Running v2.11.0 equals upstream latest v2.11.0 (GitHub releases API: v2.11.0 2026-08-21, v2.10.0 2026-07-13, v2.9.0 2026-05-09), so there is no gap today. grep for isponsorblocktv in LAB-STANDARDS.md finds only lines 1465 and 2016, no section 12 row. Compose pins the tag, not the digest (docker-compose.yml:7); UPSTREAM.txt holds the digest and its first 12 characters match the live image id d1e876636754. Releases came every 1 to 2 months in 2026. No What's Up Docker result for CT 108 was found.
 - **Fix:** In a fix run, add a section 12 upgrade backlog row (running v2.11.0, upstream v2.11.0, tag pin, source GitHub releases, checked 2026-11-02) and add this image to whatever version watch covers CT 108. Optionally pin tag plus digest in compose. Undo: git revert.
 - **Links:** LAB-DEC-022
+- **Fix run 2026-11-03 (lane FAM, Sprint 2):** Sprint 2 re-check, 2026-11-03: the review's Sprint 2 row has no IDs. Upstream latest is still v2.11.0 (2026-08-21, GitHub releases API) and the compose file pins `ghcr.io/dmunozv04/isponsorblocktv:v2.11.0`, so no image upgrade is due and nothing goes to `parts/FAM-requests.md`. CT 108 was not touched by this lane. The coordinator's Docker restart (S2-01, finished 21:07) recreated the container with json-file logs and the hardened compose file; the repo copy matches it (commit 140d8e1). OS updates for CT 108 belong to the docker-host review (coordinator).
 
 ## SEC
 
