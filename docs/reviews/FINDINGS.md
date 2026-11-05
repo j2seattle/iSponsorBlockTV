@@ -46,7 +46,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 | BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | still open |
 | HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | still open |
 | DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | fixed (verified) 2026-11-04 |
-| DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
+| DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | fixed (verified) 2026-11-05 |
 | DOC-04 | low | The preflight and the run plan say 'no repo for this slug' although the repo exists | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
 | USE-01 | low | A few settings are not used; none is clearly worth turning on | SERVICE-REVIEW I | chief | S | none | No | unverified | new |
 | CC-01 | low | Command Center cannot show this container: its metrics carry the docker-host label, not the slug | SERVICE-REVIEW J | chief | M | none | No | unverified | new |
@@ -111,6 +111,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Evidence:** Docker logs 2026-10-08 to 2026-11-01: 334 videos played, 118 with 0 segments, 11 skips, last skip 2026-10-17. ARCHITECTURE section 6 describes the log lines. KarakeepErrorBurst and similar rules show Alloy loki.process counters feeding Prometheus already work in this lab (rules list). skip_count_tracking is true, so counts go to SponsorBlock but nothing local keeps them.
 - **Fix:** Plan with MON-01: Alloy loki.process counters for 'Skipping segment', 'Playing video' and 'Connected to device' feed Prometheus; Command Center shows 'last video seen' and 'skips this month' on the Services page. No MCP and no new service. Undo: remove the Alloy stage.
 - **Links:** WISH-316
+- **Fix run 2026-11-05 (push 06, lane DOCS-B):** Proposal written in docs/proposals/2026-11-05-skip-activity-and-settings.md (Alloy loki.process counters on CT 108, Command Center tiles). Build stays with WISH-316, which waits for the alerting session. State unchanged: nothing is built.
 
 ## MON
 
@@ -187,12 +188,13 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### DOC-02: Doc edits are not committed, and the lab-standards sync receipt is behind
 
-- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** still open
+- **Severity:** low · **Effort:** S · **Approval:** none · **Owner:** chief · **Standard:** SERVICE-REVIEW H · **State:** fixed (verified) 2026-11-05
 - **Fix run 2026-11-04 (push 04b, lane MAP-DATA):** The working-tree edits are now committed (tree clean). Still missing: the CLAUDE.md sync receipt (lab-standards 575bf04) needs a real reconcile against current lab-standards, not only a new hash.
 - **Fix run 2026-11-02 (Sprint 0, lane FAM):** Skipped by rule 7: the seven modified files in the working tree belong to another session and were not reviewed, staged or committed, and the sync receipt in CLAUDE.md was not touched. Jason or that session must commit or discard them first.
 - **Checked:** verified
 - **Evidence:** git -C isponsorblocktv status --short: 7 modified files (ARCHITECTURE.md, CHANGELOG.md, CLAUDE.md, CURSOR.md, README.md, docs/RUNBOOK.md, .cursor/rules/lab-doc-contract.mdc) and 1 new file (.cursor/rules/decisions-with-docs.mdc). They hold the second-TV update of 2026-10-09 and the RAM note. HEAD ceaf4e1 (2026-10-29) has nothing unpushed. CLAUDE.md:30-37 names lab-standards 575bf04 from 2026-10-08; lab-standards is at c0c6b8c. validate-docs.py reports PASS.
 - **Fix:** In a fix run, review and commit the working-tree edits by file name, refresh the sync receipt, push the repo first and lab-standards second. Undo: git revert.
+- **Fix run 2026-11-05 (push 06, lane DOCS-B):** Fixed (verified). `git status --short` is clean. CLAUDE.md sync receipt moved from 575bf04 (2026-10-08) to 5f1708c (lab-standards 1.9.52) after reading the slug's CHANGELOG and LAB-DECISIONS lines since then and the R1 rows in SERVICE-INVENTORY and SERVICE-READINESS; they agree with the repo's R1. Evidence: the lane DOCS-B commit on CLAUDE.md. Undo: git revert.
 
 ### DOC-03: Readiness is recorded as R1 'deliberate'; the live checks support R0
 
@@ -211,6 +213,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** verified
 - **Evidence:** Evidence file preflight row 'Repo, HEAD, doc last_verified ages': 'no repo for this slug; results folder lab-standards/service-reviews/isponsorblocktv/'. The repo isponsorblocktv exists (Gitea jason/iSponsorBlockTV, HEAD ceaf4e1) and run.json uses results_dir isponsorblocktv/docs/reviews. The preflight finds repos by slug and cannot map this one because the Gitea and GitHub names keep the upstream capitalisation (SERVICE-SLUG-REGISTRY.md:255).
 - **Fix:** Teach review-preflight.py to use the registry's repo name column or the SERVICE-SLUG-REGISTRY.md:255 exception. Doc and script change. Undo: git revert.
+- **Fix run 2026-11-05 (push 06, lane DOCS-B):** Still open. Checked 2026-11-05: management/review-preflight.py in lab-standards has no case for the upstream-capitalised repo name (registry exception at SERVICE-SLUG-REGISTRY.md:255); the fix is in lab-standards, not this repo. Handed to the coordinator in parts/DOCS-B-2-ls-text.md.
 
 ## USE
 
@@ -220,6 +223,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 - **Checked:** unverified (Upstream documentation for v2.11.0 was not read in this lane; the list is from the lab runbook.)
 - **Evidence:** The setup wizard (docs/RUNBOOK.md) lists: proxy, devices, YouTube API key, categories, channel whitelist, minimum skip length, report skips, mute ads, skip ads, autoplay, SponsorBlock URL. Used: devices (2), categories (3 of 10: sponsor, selfpromo, interaction), mute ads, skip ads, autoplay, report skips. Not used: channel whitelist (needs a YouTube Data API key, none issued), minimum skip length, proxy, and the other categories (intro, outro, preview, hook, exclusive_access, filler, music_offtopic), off on purpose per ARCHITECTURE section 16. The feature list comes from the lab's runbook; the upstream docs were not read, so extra features may exist.
 - **Fix:** No change. If Jason wants it, 'intro' and 'outro' categories are the likeliest next step for family viewing; edit config.json and restart. Undo: restore the previous categories.
+- **Fix run 2026-11-05 (push 06, lane DOCS-B):** Proposal section written in docs/proposals/2026-11-05-skip-activity-and-settings.md: no change recommended; intro and outro are the likeliest next categories if Jason asks. Still unverified against the upstream v2.11.0 docs. State unchanged.
 
 ## CC
 

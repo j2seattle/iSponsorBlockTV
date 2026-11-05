@@ -18,7 +18,7 @@ depends_on: [docker-host]
 depended_on_by: []
 agent_context: true
 permission_tier: read-only
-last_verified: 2026-10-08
+last_verified: 2026-11-05
 ---
 
 # CLAUDE.md — iSponsorBlockTV
@@ -31,10 +31,10 @@ last_verified: 2026-10-08
 
 | Field | Value |
 |---|---|
-| **Last reconciled** | 2026-10-08 |
-| **lab-standards commit** | `575bf04` |
-| **lab-standards version** | 1.9.37, plus unreleased notes through 2026-10-08 |
-| **Reconciled by** | Cursor Grok |
+| **Last reconciled** | 2026-11-05 |
+| **lab-standards commit** | `5f1708c` |
+| **lab-standards version** | 1.9.52 |
+| **Reconciled by** | Claude Code (push 06, lane DOCS-B). Read the isponsorblocktv lines in lab-standards CHANGELOG and LAB-DECISIONS since 2026-10-08, the R1 rows in SERVICE-INVENTORY and SERVICE-READINESS; no contradiction with this repo found |
 | **Open items flowing up** | R1 ceiling: no HTTP surface. Gate 7 not tested for this container. Gate 8 is one memory sample. |
 
 ## Read order
