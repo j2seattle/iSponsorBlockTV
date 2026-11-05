@@ -25,6 +25,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 | Run | Date | Kind | Counts | File |
 |---|---|---|---|---|
 | 1 | 2026-11-02 | review (read only, nothing changed on any server) | critical 0, high 0, medium 6, low 12 (18 total) | [2026-11-02-service-review.md](2026-11-02-service-review.md) |
+| 2 | 2026-11-04 | reconcile (push 05, lane RECON-C) | states changed 1 (1 still open): BAK-02 | this file |
 
 | 2 | 2026-11-04 | fix (Sprint 0 remainder, lane MAP-DATA) | fixed 1, not needed 0, still open 3 (DOC-02, DOC-04, SPD-01), needs Jason 2 (BAK-01, HLT-01) | this file |
 ## Findings
@@ -42,7 +43,7 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 | SPD-01 | low | No measured baseline, and Prometheus has no CPU or memory series for the container | Gate 8 | chief | S | none | No | verified | still open |
 | INT-01 | low | Nothing in the lab reads this container's skip activity, though it is easy to count | none | chief | M | none | No | verified | new |
 | MON-02 | low | The SRE good-check has no stored reading, and today it would fail | SERVICE-REVIEW E | chief | S | none | No | verified | fixed (verified) |
-| BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | needs PLAT |
+| BAK-02 | low | No restore test covers this container's config | Gate 7 | chief | M | remediate | No | verified | still open |
 | HLT-02 | low | Occasional connection errors and no health check or auto-restart for a stuck loop | SERVICE-REVIEW G | chief | S | remediate | No | verified | still open |
 | DOC-01 | low | ARCHITECTURE, BASELINES and CHANGELOG are behind the live container | SERVICE-REVIEW H | chief | S | none | No | verified | fixed (verified) 2026-11-04 |
 | DOC-02 | low | Doc edits are not committed, and the lab-standards sync receipt is behind | SERVICE-REVIEW H | chief | S | none | No | verified | still open |
@@ -144,12 +145,13 @@ Process: lab-standards `docs/SERVICE-REVIEW.md` · Run log: lab-standards `servi
 
 ### BAK-02: No restore test covers this container's config
 
-- **Severity:** low · **Effort:** M · **Approval:** remediate · **Owner:** chief · **Standard:** Gate 7 · **State:** needs PLAT
+- **Severity:** low · **Effort:** M · **Approval:** remediate · **Owner:** chief · **Standard:** Gate 7 · **State:** still open
 - **Checked:** verified
 - **Evidence:** restore-log.jsonl:31 holds the only CT 108 test (2026-10-07, pass). The container was installed 2026-10-08, after it. ARCHITECTURE section 10: 'Gate 7 for isponsorblocktv is not tested'. WISH-020 names iSponsorBlockTV among services with no restore test.
 - **Fix:** Fold into the docker-host restore test (docker-host BAK-01): after restoring a recent CT 108 backup to a scratch CT with the network card down, check that /opt/isponsorblocktv/data/config.json is there. Do not start the container on the scratch CT with the network up: it would use the live TV credentials. Needs Jason's OK. Undo: destroy the scratch CT.
 - **Links:** WISH-020
 - **Fix run 2026-11-02 (lane FAM, Sprint 1):** The finding folds into the docker-host scratch restore of CT 108, which lane PLAT owns. Request in `parts/FAM-requests.md`: when PLAT restores CT 108, check that `/opt/isponsorblocktv/data/config.json` exists and is mode 600, with the network removed and the container not started. CT 108 has a 24G disk, so the test is small.
+- **Reconcile 2026-11-04 (push 05, lane RECON-C):** State needs PLAT -> still open. Lane PLAT has ended and CT 108 was not among the 2026-11-04 scratch restores (CT 132, 129, 120). Use proxmox-backup-server/scripts/scratch-restore.sh and check /opt/isponsorblocktv/data/config.json is mode 600. Chief to schedule (HANDOFF 04b row 24).
 
 ## HLT
 
