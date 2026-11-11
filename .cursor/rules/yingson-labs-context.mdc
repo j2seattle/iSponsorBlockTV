@@ -48,7 +48,7 @@ Reference this registry when generating configs, SSH commands, runbooks, or docu
 | Nginx Proxy Manager (NPM) | CT | 192.168.30.182 | Reverse proxy |
 | Immich | CT | 192.168.30.98 | Photo storage |
 | Uptime Kuma | CT | 192.168.30.130 | Monitoring |
-| Home Assistant | VM | 192.168.5.20 | On Home VLAN |
+| Home Assistant | VM123 | 192.168.30.188 | HAOS appliance (SERVICE-INVENTORY.md) |
 | OpenWebUI | CT | 192.168.30.123 | LLM interface |
 | Homarr | CT | 192.168.30.107 | Dashboard |
 | Gitea | CT110 | 192.168.30.51 | Source of truth |
