@@ -29,4 +29,4 @@ Preferred laptop remote: HTTPS `https://gitea.yingson.com/jason/<repo>.git` (sam
 - **Never** use `192.168.20.109` (stale SSH `Host proxmox` / old docs)
 - Laptop SSH: **`jason@192.168.30.209`** (`ssh proxmox`) with `~/.ssh/id_ed25519_lab`. Passwordless sudo. Use `sudo pct list` / `sudo pct enter <id>`. Do not SSH as `root` from the laptop.
 - **Guest SSH:** any service repo with a guest must have passwordless `jason@` from the laptop. Guest `authorized_keys` (1a) **and** laptop `Host <slug> <IP>` with `IdentityFile ~/.ssh/id_ed25519_lab` and `IdentitiesOnly yes` (1c). Verify: `ssh -o BatchMode=yes <slug> whoami`. Key-on-guest without the Host block still prompts for a password on Windows. Do not set a `jason` password. `pct exec` is fallback only.
-- OpenClaw is **CT102** (`openclaw.yingson.com`) at **192.168.30.213** (`ssh openclaw`)
+- OpenClaw is **CT102** (`openclaw.yingson.com`) at **192.168.30.213** (`ssh openclaw`). It is suspended and powered off since 2026-10-22 (LAB-DEC-038). Hermes (CT 130) and Paperclip (CT 128) are the deployed agents.
